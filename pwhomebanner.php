@@ -258,7 +258,7 @@ class  PwHomeBanner extends Module {
                     $this->_html .= $this->getShopContextError(null, $mode);
             }
             else {
-                $associated_shop_ids = BwHomeBanners::getAssociatedIdsShop((int) Tools::getValue('id_slide'));
+                $associated_shop_ids = PwHomeBanners::getAssociatedIdsShop((int) Tools::getValue('id_slide'));
                 $context_shop_id = (int) Shop::getContextShopID();
 
                 if ($associated_shop_ids === false)
@@ -430,7 +430,7 @@ class  PwHomeBanner extends Module {
                 Tools::redirectAdmin($this->context->link->getAdminLink('AdminModules', true) . '&conf=6&configure=' . $this->name . '&tab_module=' . $this->tab . '&module_name=' . $this->name);
         } /* Process Slide status */
         elseif (Tools::isSubmit('changeStatus') && Tools::isSubmit('id_slide')) {
-            $slide = new BwHomeBanners((int) Tools::getValue('id_slide'));
+            $slide = new PwHomeBanners((int) Tools::getValue('id_slide'));
             if ($slide->active == 0)
                 $slide->active = 1;
             else
@@ -742,7 +742,7 @@ class  PwHomeBanner extends Module {
         $slides = $this->getSlides();
         foreach ($slides as $key => $slide) {
             $slides[$key]['status'] = $this->displayStatus($slide['id_slide'], $slide['active']);
-            $associated_shop_ids = BwHomeBanners::getAssociatedIdsShop((int) $slide['id_slide']);
+            $associated_shop_ids = PwHomeBanners::getAssociatedIdsShop((int) $slide['id_slide']);
             if ($associated_shop_ids && count($associated_shop_ids) > 1)
                 $slides[$key]['is_shared'] = true;
             else
