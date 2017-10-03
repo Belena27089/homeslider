@@ -1,7 +1,7 @@
 <?php
 
 /*
- * 2007-2016 PrestaShop
+ * 2017 Belenaweb
  *
  * NOTICE OF LICENSE
  *
@@ -19,8 +19,8 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author PrestaShop SA <contact@prestashop.com>
- *  @copyright  2007-2016 PrestaShop SA
+ *  @author Bistrova Elena(Belenaweb)
+ *  @copyright  2017 Belenaweb
  *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
@@ -31,9 +31,9 @@
 if (!defined('_PS_VERSION_'))
     exit;
 
-include_once(_PS_MODULE_DIR_ . 'homeslider/HomeSlide.php');
+include_once(_PS_MODULE_DIR_ . 'pwhomebanner/PwHomeBanners.php');
 
-class HomeSlider extends Module {
+class  PwHomeBanner extends Module {
 
     protected $_html = '';
     protected $default_width = 779;
@@ -42,18 +42,18 @@ class HomeSlider extends Module {
     protected $default_loop = 1;
 
     public function __construct() {
-        $this->name = 'homeslider';
+        $this->name = 'pwhomebanner';
         $this->tab = 'front_office_features';
-        $this->version = '1.6.1';
-        $this->author = 'PrestaShop';
+        $this->version = '1.0.0';
+        $this->author = 'Bistrova Elena(Belenaweb)';
         $this->need_instance = 0;
         $this->secure_key = Tools::encrypt($this->name);
         $this->bootstrap = true;
 
         parent::__construct();
 
-        $this->displayName = $this->l('Image slider for your homepage');
-        $this->description = $this->l('Adds an image slider to your homepage.');
+        $this->displayName = $this->l('Bunner slider for your homepage');
+        $this->description = $this->l('Adds an bunner slider to your homepage.');
         $this->ps_versions_compliancy = array('min' => '1.6.0.4', 'max' => '1.6.99.99');
     }
 
@@ -94,22 +94,22 @@ class HomeSlider extends Module {
                 }
             }
 
-//			/* Sets up Global configuration */
+            /* Sets up Global configuration */
             $res = Configuration::updateValue('HOMESLIDER_WIDTH', $this->default_width);
             $res &= Configuration::updateValue('HOMESLIDER_SPEED', $this->default_speed);
             $res &= Configuration::updateValue('HOMESLIDER_PAUSE', $this->default_pause);
             $res &= Configuration::updateValue('HOMESLIDER_LOOP', $this->default_loop);
-//
-//			/* Creates tables */
+
+            /* Creates tables */
             $res &= $this->createTables();
-//
-//			/* Adds samples */
+
+            /* Adds samples */
             if ($res)
                 $this->installSamples();
-//
-//			// Disable on mobiles and tablets
+
+            // Disable on mobiles and tablets
             $this->disableDevice(Context::DEVICE_MOBILE);
-//
+
             return (bool) $res;
         }
 
@@ -122,17 +122,23 @@ class HomeSlider extends Module {
     protected function installSamples() {
         $languages = Language::getLanguages(false);
         for ($i = 1; $i <= 3; ++$i) {
-            $slide = new HomeSlide();
+            $slide = new PwHomeBanners();
             $slide->position = $i;
             $slide->active = 1;
             foreach ($languages as $language) {
                 $slide->title[$language['id_lang']] = 'Sample ' . $i;
-                $slide->description[$language['id_lang']] = '<h2>EXCEPTEUR<br />OCCAECAT</h2>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin tristique in tortor et dignissim. Quisque non tempor leo. Maecenas egestas sem elit</p>
-				<p><button class="btn btn-default" type="button">Shop now !</button></p>';
-                $slide->description_short[$language['id_lang']] = '<h2>EXCEPTEUR111<br />OCCAECAT11</h2>
-				<p>Lorem5656757 ipsum dolor sit amet, consectetur adipiscing elit. Proin tristique in tortor et dignissim. Quisque non tempor leo. Maecenas egestas sem elit</p>
-				<p><button class="btntutyyu btn-default" type="button">Shop now !</button></p>';
+                $slide->description[$language['id_lang']] = '<ul>
+<li>Дальность хода: 30 - 40 км.</li>
+<li>Вес: от 9 - 15 кг.</li>
+<li>Bluetooth: Музыка</li>
+<li>Двигатель: 300 - 1300 W</li>
+</ul>';
+                $slide->description_short[$language['id_lang']] = '<ul>
+<li>Дальность хода: 30 - 40 км.</li>
+<li>Вес: от 9 - 15 кг.</li>
+<li>Bluetooth: Музыка</li>
+<li>Двигатель: 300 - 1300 W</li>
+</ul>';
                 $slide->legend[$language['id_lang']] = 'sample-' . $i;
                 $slide->url[$language['id_lang']] = 'http://www.prestashop.com/?utm_source=back-office&utm_medium=v16_homeslider'
                         . '&utm_campaign=back-office-' . Tools::strtoupper($this->context->language->iso_code)
@@ -171,27 +177,27 @@ class HomeSlider extends Module {
     protected function createTables() {
         /* Slides */
         $res = (bool) Db::getInstance()->execute('
-			CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'homeslider` (
-				`id_homeslider_slides` int(10) unsigned NOT NULL AUTO_INCREMENT,
+			CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'pwhomebanner` (
+				`id_pwhomebanner_slides` int(10) unsigned NOT NULL AUTO_INCREMENT,
 				`id_shop` int(10) unsigned NOT NULL,
-				PRIMARY KEY (`id_homeslider_slides`, `id_shop`)
+				PRIMARY KEY (`id_pwhomebanner_slides`, `id_shop`)
 			) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=UTF8;
 		');
 
         /* Slides configuration */
         $res &= Db::getInstance()->execute('
-			CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'homeslider_slides` (
-			  `id_homeslider_slides` int(10) unsigned NOT NULL AUTO_INCREMENT,
+			CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'pwhomebanner_slides` (
+			  `id_pwhomebanner_slides` int(10) unsigned NOT NULL AUTO_INCREMENT,
 			  `position` int(10) unsigned NOT NULL DEFAULT \'0\',
 			  `active` tinyint(1) unsigned NOT NULL DEFAULT \'0\',
-			  PRIMARY KEY (`id_homeslider_slides`)
+			  PRIMARY KEY (`id_pwhomebanner_slides`)
 			) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=UTF8;
 		');
 
         /* Slides lang configuration */
         $res &= Db::getInstance()->execute('
-			CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'homeslider_slides_lang` (
-			  `id_homeslider_slides` int(10) unsigned NOT NULL,
+			CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'pwhomebanner_slides_lang` (
+			  `id_pwhomebanner_slides` int(10) unsigned NOT NULL,
 			  `id_lang` int(10) unsigned NOT NULL,
 			  `title` varchar(255) NOT NULL,
 			  `description` text NOT NULL,
@@ -200,7 +206,7 @@ class HomeSlider extends Module {
 			  `url` varchar(255) NOT NULL,
 			  `icon` varchar(255) NOT NULL,
 			  `image` varchar(255) NOT NULL,
-			  PRIMARY KEY (`id_homeslider_slides`,`id_lang`)
+			  PRIMARY KEY (`id_pwhomebanner_slides`,`id_lang`)
 			) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=UTF8;
 		');
 
@@ -213,12 +219,12 @@ class HomeSlider extends Module {
     protected function deleteTables() {
         $slides = $this->getSlides();
         foreach ($slides as $slide) {
-            $to_del = new HomeSlide($slide['id_slide']);
+            $to_del = new PwHomeBanners($slide['id_slide']);
             $to_del->delete();
         }
 
         return Db::getInstance()->execute('
-			DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'homeslider`, `' . _DB_PREFIX_ . 'homeslider_slides`, `' . _DB_PREFIX_ . 'homeslider_slides_lang`;
+			DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'pwhomebanner`, `' . _DB_PREFIX_ . 'pwhomebanner_slides`, `' . _DB_PREFIX_ . 'pwhomebanner_slides_lang`;
 		');
     }
 
@@ -252,7 +258,7 @@ class HomeSlider extends Module {
                     $this->_html .= $this->getShopContextError(null, $mode);
             }
             else {
-                $associated_shop_ids = HomeSlide::getAssociatedIdsShop((int) Tools::getValue('id_slide'));
+                $associated_shop_ids = BwHomeBanners::getAssociatedIdsShop((int) Tools::getValue('id_slide'));
                 $context_shop_id = (int) Shop::getContextShopID();
 
                 if ($associated_shop_ids === false)
@@ -424,7 +430,7 @@ class HomeSlider extends Module {
                 Tools::redirectAdmin($this->context->link->getAdminLink('AdminModules', true) . '&conf=6&configure=' . $this->name . '&tab_module=' . $this->tab . '&module_name=' . $this->name);
         } /* Process Slide status */
         elseif (Tools::isSubmit('changeStatus') && Tools::isSubmit('id_slide')) {
-            $slide = new HomeSlide((int) Tools::getValue('id_slide'));
+            $slide = new BwHomeBanners((int) Tools::getValue('id_slide'));
             if ($slide->active == 0)
                 $slide->active = 1;
             else
@@ -437,13 +443,13 @@ class HomeSlider extends Module {
         elseif (Tools::isSubmit('submitSlide')) {
             /* Sets ID if needed */
             if (Tools::getValue('id_slide')) {
-                $slide = new HomeSlide((int) Tools::getValue('id_slide'));
+                $slide = new BwHomeBanners((int) Tools::getValue('id_slide'));
                 if (!Validate::isLoadedObject($slide)) {
                     $this->_html .= $this->displayError($this->l('Invalid slide ID'));
                     return false;
                 }
             } else
-                $slide = new HomeSlide();
+                $slide = new PwHomeBanners();
             /* Sets position */
             $slide->position = (int) Tools::getValue('position');
             /* Sets active */
@@ -538,7 +544,7 @@ class HomeSlider extends Module {
             }
         } /* Deletes */
         elseif (Tools::isSubmit('delete_id_slide')) {
-            $slide = new HomeSlide((int) Tools::getValue('delete_id_slide'));
+            $slide = new PwHomeBanners((int) Tools::getValue('delete_id_slide'));
             $res = $slide->delete();
             $this->clearCache();
             if (!$res)
@@ -557,7 +563,7 @@ class HomeSlider extends Module {
     }
 
     protected function _prepareHook() {
-        if (!$this->isCached('homeslider.tpl', $this->getCacheId())) {
+        if (!$this->isCached('pwhomebanner.tpl', $this->getCacheId())) {
             $slides = $this->getSlides(true);
             if (is_array($slides))
                 foreach ($slides as &$slide) {
@@ -569,7 +575,7 @@ class HomeSlider extends Module {
             if (!$slides)
                 return false;
 
-            $this->smarty->assign(array('homeslider_slides' => $slides));
+            $this->smarty->assign(array('pwhomebanner_slides' => $slides));
         }
 
         return true;
@@ -578,8 +584,8 @@ class HomeSlider extends Module {
     public function hookdisplayHeader($params) {
         if (!isset($this->context->controller->php_self) || $this->context->controller->php_self != 'index')
             return;
-        $this->context->controller->addCSS($this->_path . 'homeslider.css');
-        $this->context->controller->addJS($this->_path . 'js/homeslider.js');
+        $this->context->controller->addCSS($this->_path . 'pwhomebanner.css');
+        $this->context->controller->addJS($this->_path . 'js/pwhomebanner.js');
         $this->context->controller->addJqueryPlugin(array('bxslider'));
 
 
@@ -592,7 +598,7 @@ class HomeSlider extends Module {
             'loop' => (bool) $config['HOMESLIDER_LOOP'],
         );
 
-        $this->smarty->assign('homeslider', $slider);
+        $this->smarty->assign('pwhomebanner', $slider);
         return $this->display(__FILE__, 'header.tpl');
     }
 
@@ -607,25 +613,25 @@ class HomeSlider extends Module {
         if (!$this->_prepareHook())
             return false;
 
-        return $this->display(__FILE__, 'homeslider.tpl', $this->getCacheId());
+        return $this->display(__FILE__, 'pwhomebanner.tpl', $this->getCacheId());
     }
 
     public function hookDisplayHome() {
         if (!$this->_prepareHook())
             return false;
 
-        return $this->display(__FILE__, 'homeslider.tpl', $this->getCacheId());
+        return $this->display(__FILE__, 'pwhomebanner.tpl', $this->getCacheId());
     }
 
     public function clearCache() {
-        $this->_clearCache('homeslider.tpl');
+        $this->_clearCache('pwhomebanner.tpl');
     }
 
     public function hookActionShopDataDuplication($params) {
         Db::getInstance()->execute('
-			INSERT IGNORE INTO ' . _DB_PREFIX_ . 'homeslider (id_homeslider_slides, id_shop)
-			SELECT id_homeslider_slides, ' . (int) $params['new_id_shop'] . '
-			FROM ' . _DB_PREFIX_ . 'homeslider
+			INSERT IGNORE INTO ' . _DB_PREFIX_ . 'pwhomebanner (id_pwhomebanner_slides, id_shop)
+			SELECT id_pwhomebanner_slides, ' . (int) $params['new_id_shop'] . '
+			FROM ' . _DB_PREFIX_ . 'pwhomebanner
 			WHERE id_shop = ' . (int) $params['old_id_shop']
         );
         $this->clearCache();
@@ -663,8 +669,8 @@ class HomeSlider extends Module {
     public function getNextPosition() {
         $row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT MAX(hss.`position`) AS `next_position`
-			FROM `' . _DB_PREFIX_ . 'homeslider_slides` hss, `' . _DB_PREFIX_ . 'homeslider` hs
-			WHERE hss.`id_homeslider_slides` = hs.`id_homeslider_slides` AND hs.`id_shop` = ' . (int) $this->context->shop->id
+			FROM `' . _DB_PREFIX_ . 'pwhomebanner_slides` hss, `' . _DB_PREFIX_ . 'pwhomebanner` hs
+			WHERE hss.`id_pwhomebanner_slides` = hs.`id_pwhomebanner_slides` AND hs.`id_shop` = ' . (int) $this->context->shop->id
         );
 
         return ( ++$row['next_position']);
@@ -676,11 +682,11 @@ class HomeSlider extends Module {
         $id_lang = $this->context->language->id;
 
         return Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS('
-			SELECT hs.`id_homeslider_slides` as id_slide, hss.`position`, hss.`active`, hssl.`title`,
+			SELECT hs.`id_pwhomebanner_slides` as id_slide, hss.`position`, hss.`active`, hssl.`title`,
 			hssl.`url`, hssl.`legend`, hssl.`description`,hssl.`description_short`, hssl.`icon`,hssl.`image`
-			FROM ' . _DB_PREFIX_ . 'homeslider hs
-			LEFT JOIN ' . _DB_PREFIX_ . 'homeslider_slides hss ON (hs.id_homeslider_slides = hss.id_homeslider_slides)
-			LEFT JOIN ' . _DB_PREFIX_ . 'homeslider_slides_lang hssl ON (hss.id_homeslider_slides = hssl.id_homeslider_slides)
+			FROM ' . _DB_PREFIX_ . 'pwhomebanner hs
+			LEFT JOIN ' . _DB_PREFIX_ . 'pwhomebanner_slides hss ON (hs.id_pwhomebanner_slides = hss.id_pwhomebanner_slides)
+			LEFT JOIN ' . _DB_PREFIX_ . 'pwhomebanner_slides_lang hssl ON (hss.id_pwhomebanner_slides = hssl.id_pwhomebanner_slides)
 			WHERE id_shop = ' . (int) $id_shop . '
 			AND hssl.id_lang = ' . (int) $id_lang .
                         ($active ? ' AND hss.`active` = 1' : ' ') . '
@@ -697,10 +703,10 @@ class HomeSlider extends Module {
 
         $results = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS('
 			SELECT hssl.`image`, hssl.`id_lang`
-			FROM ' . _DB_PREFIX_ . 'homeslider hs
-			LEFT JOIN ' . _DB_PREFIX_ . 'homeslider_slides hss ON (hs.id_homeslider_slides = hss.id_homeslider_slides)
-			LEFT JOIN ' . _DB_PREFIX_ . 'homeslider_slides_lang hssl ON (hss.id_homeslider_slides = hssl.id_homeslider_slides)
-			WHERE hs.`id_homeslider_slides` = ' . (int) $id_slides . ' AND hs.`id_shop` = ' . (int) $id_shop .
+			FROM ' . _DB_PREFIX_ . 'pwhomebanner hs
+			LEFT JOIN ' . _DB_PREFIX_ . 'pwhomebanner_slides hss ON (hs.id_pwhomebanner_slides = hss.id_pwhomebanner_slides)
+			LEFT JOIN ' . _DB_PREFIX_ . 'pwhomebanner_slides_lang hssl ON (hss.id_pwhomebanner_slides = hssl.id_pwhomebanner_slides)
+			WHERE hs.`id_pwhomebanner_slides` = ' . (int) $id_slides . ' AND hs.`id_shop` = ' . (int) $id_shop .
                 ($active ? ' AND hss.`active` = 1' : ' ')
         );
 
@@ -724,9 +730,9 @@ class HomeSlider extends Module {
     }
 
     public function slideExists($id_slide) {
-        $req = 'SELECT hs.`id_homeslider_slides` as id_slide
-				FROM `' . _DB_PREFIX_ . 'homeslider` hs
-				WHERE hs.`id_homeslider_slides` = ' . (int) $id_slide;
+        $req = 'SELECT hs.`id_pwhomebanner_slides` as id_slide
+				FROM `' . _DB_PREFIX_ . 'pwhomebanner` hs
+				WHERE hs.`id_pwhomebanner_slides` = ' . (int) $id_slide;
         $row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow($req);
 
         return ($row);
@@ -736,7 +742,7 @@ class HomeSlider extends Module {
         $slides = $this->getSlides();
         foreach ($slides as $key => $slide) {
             $slides[$key]['status'] = $this->displayStatus($slide['id_slide'], $slide['active']);
-            $associated_shop_ids = HomeSlide::getAssociatedIdsShop((int) $slide['id_slide']);
+            $associated_shop_ids = BwHomeBanners::getAssociatedIdsShop((int) $slide['id_slide']);
             if ($associated_shop_ids && count($associated_shop_ids) > 1)
                 $slides[$key]['is_shared'] = true;
             else
@@ -840,7 +846,7 @@ class HomeSlider extends Module {
         );
 
         if (Tools::isSubmit('id_slide') && $this->slideExists((int) Tools::getValue('id_slide'))) {
-            $slide = new HomeSlide((int) Tools::getValue('id_slide'));
+            $slide = new PwHomeBanners((int) Tools::getValue('id_slide'));
             $fields_form['form']['input'][] = array('type' => 'hidden', 'name' => 'id_slide');
             $fields_form['form']['images'] = $slide->image;
             $fields_form['form']['icons'] = $slide->icon;
@@ -982,10 +988,10 @@ class HomeSlider extends Module {
         $fields = array();
 
         if (Tools::isSubmit('id_slide') && $this->slideExists((int) Tools::getValue('id_slide'))) {
-            $slide = new HomeSlide((int) Tools::getValue('id_slide'));
+            $slide = new PwHomeBanners((int) Tools::getValue('id_slide'));
             $fields['id_slide'] = (int) Tools::getValue('id_slide', $slide->id);
         } else
-            $slide = new HomeSlide();
+            $slide = new PwHomeBanners();
 
         $fields['active_slide'] = Tools::getValue('active_slide', $slide->active);
         $fields['has_picture'] = true;
